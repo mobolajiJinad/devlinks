@@ -5,21 +5,19 @@ import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
+import { Lock, Mail } from "lucide-react";
+import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
-import PasswordIcon from "@/app/_assets/PasswordIcon.svg";
-import EmailIcon from "@/app/_assets/EmailIcon.svg";
-import Link from "next/link";
 
 const formSchema = z.object({
   email: z.string(),
@@ -63,21 +61,21 @@ const Page = () => {
               name="email"
               render={({ field }) => (
                 <FormItem className="w-full md:w-96">
-                  <FormLabel className="text-xs font-normal text-charcoal">
+                  <FormLabel className="text-xs font-normal text-charcoal md:text-sm">
                     Email address
                   </FormLabel>
 
                   <FormControl>
                     <div className="relative">
-                      <Image
-                        src={EmailIcon}
-                        alt="icon"
-                        className="absolute left-3 top-3"
+                      <Mail
+                        width="20px"
+                        height="20px"
+                        className="absolute left-3 top-2 text-gray"
                       />
                       <Input
                         type="email"
                         placeholder="e.g. alex@gmail.com"
-                        className="pl-9 text-charcoal active:outline-violet"
+                        className="pl-9 text-base text-charcoal active:outline-violet md:text-lg"
                         {...field}
                       />
                     </div>
@@ -92,21 +90,21 @@ const Page = () => {
               name="password"
               render={({ field }) => (
                 <FormItem className="w-full md:w-96">
-                  <FormLabel className="text-xs font-normal text-charcoal">
+                  <FormLabel className="text-xs font-normal text-charcoal md:text-sm">
                     Password
                   </FormLabel>
 
                   <FormControl>
                     <div className="relative">
-                      <Image
-                        src={PasswordIcon}
-                        alt="icon"
-                        className="absolute left-3 top-3"
+                      <Lock
+                        width="20px"
+                        height="20px"
+                        className="absolute left-3 top-2 text-gray"
                       />
                       <Input
                         type="password"
                         placeholder="At least 8 characters"
-                        className="pl-9 text-charcoal active:outline-violet"
+                        className="pl-9 text-base text-charcoal active:outline-violet md:text-lg"
                         {...field}
                       />{" "}
                     </div>
@@ -121,21 +119,21 @@ const Page = () => {
               name="confirmPassword"
               render={({ field }) => (
                 <FormItem className="w-full md:w-96">
-                  <FormLabel className="text-xs font-normal text-charcoal">
+                  <FormLabel className="text-xs font-normal text-charcoal md:text-sm">
                     Password
                   </FormLabel>
 
                   <FormControl>
                     <div className="relative">
-                      <Image
-                        src={PasswordIcon}
-                        alt="icon"
-                        className="absolute left-3 top-3"
+                      <Lock
+                        width="20px"
+                        height="20px"
+                        className="absolute left-3 top-2 text-gray"
                       />
                       <Input
                         type="password"
                         placeholder="At least 8 characters"
-                        className="pl-9 text-charcoal active:outline-violet"
+                        className="pl-9 text-base text-charcoal active:outline-violet md:text-lg"
                         {...field}
                       />{" "}
                     </div>
