@@ -1,12 +1,15 @@
 "use client";
 
-import Image from "next/image";
-import { zodResolver } from "@hookform/resolvers/zod";
+import Link from "next/link";
+// import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Lock, Mail } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -15,26 +18,35 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 
-import Link from "next/link";
-
-const formSchema = z.object({
-  email: z.string(),
-  password: z.string(),
-});
+import { loginFormSchema } from "@/lib/schema";
 
 const Page = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const router = useRouter();
+  // const supabase = createClientComponentClient();
+
+  const form = useForm<z.infer<typeof loginFormSchema>>({
+    resolver: zodResolver(loginFormSchema),
     defaultValues: {
       email: "",
       password: "",
     },
+    mode: "onChange",
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
+    // const res = await supabase.auth.signInWithPassword({
+    //   email: values.email,
+    //   password: values.password,
+    // });
+    // if (res.data.user) {
+    //   router.refresh();
+
+    //   form.reset();
+    // } else {
+    //   console.log("Sign-in error:", res.error);
+    // }
+    console.log("form submitted");
   };
 
   return (

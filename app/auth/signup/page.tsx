@@ -1,14 +1,15 @@
 "use client";
 
-import Image from "next/image";
-
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { Lock, Mail } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+// import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Lock, Mail } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -17,26 +18,38 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
 
-const formSchema = z.object({
-  email: z.string(),
-  password: z.string(),
-  confirmPassword: z.string(),
-});
+import { signupFormSchema } from "@/lib/schema";
 
 const Page = () => {
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const router = useRouter();
+  // const supabase = createClientComponentClient();
+
+  const form = useForm<z.infer<typeof signupFormSchema>>({
+    resolver: zodResolver(signupFormSchema),
     defaultValues: {
       email: "",
       password: "",
       confirmPassword: "",
     },
+    mode: "onChange",
   });
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log(values);
+  const onSubmit = async (values: z.infer<typeof signupFormSchema>) => {
+    // const res = await supabase.auth.signUp({
+    //   email: values.email,
+    //   password: values.password,
+    //   options: {
+    //     emailRedirectTo: `${location.origin}/auth/callback`,
+    //   },
+    // });
+    // if (res.data.user) {
+    //   router.refresh();
+    //   form.reset();
+    // } else {
+    //   console.log("Sign-up error:", res.error);
+    // }
+    console.log("form submitted");
   };
 
   return (
