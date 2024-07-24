@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-// import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { Lock, Mail } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,7 @@ import { signupFormSchema } from "@/lib/schema";
 
 const Page = () => {
   const router = useRouter();
-  // const supabase = createClientComponentClient();
+  const supabase = createClientComponentClient();
 
   const form = useForm<z.infer<typeof signupFormSchema>>({
     resolver: zodResolver(signupFormSchema),
@@ -36,20 +36,19 @@ const Page = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof signupFormSchema>) => {
-    // const res = await supabase.auth.signUp({
-    //   email: values.email,
-    //   password: values.password,
-    //   options: {
-    //     emailRedirectTo: `${location.origin}/auth/callback`,
-    //   },
-    // });
-    // if (res.data.user) {
-    //   router.refresh();
-    //   form.reset();
-    // } else {
-    //   console.log("Sign-up error:", res.error);
-    // }
-    console.log("form submitted");
+    const res = await supabase.auth.signUp({
+      email: values.email,
+      password: values.password,
+      options: {
+        emailRedirectTo: `${location.origin}/auth/callback`,
+      },
+    });
+    if (res.data.user) {
+      router.refresh();
+      form.reset();
+    } else {
+      console.log("Sign-up error:", res.error);
+    }
   };
 
   return (

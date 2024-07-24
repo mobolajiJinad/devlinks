@@ -12,11 +12,8 @@ import MainImage from "@/app/_assets/MainImage.svg";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import FormSection from "@/components/FormSection";
-import { Form } from "@/components/ui/form";
 
 type addLinkFormValues = z.infer<typeof addLinkFormSchema>;
-
-// Lorem ipsum dolor, sit amet consectetur adipisicing elit. Delectus eum perferendis esse asperiores nulla dolore quibusdam similique adipisci est dignissimos laboriosam quas, aperiam quis praesentium ut architecto voluptates vel! Asperiores. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Consequuntur neque, laboriosam odit odio, explicabo, doloremque aperiam corrupti iste sint sunt ducimus unde? Cupiditate, sequi debitis. Aperiam delectus unde nulla inventore? Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut sed laborum earum optio soluta velit id possimus aut voluptate aliquid rerum nihil quia, placeat repudiandae ipsum voluptatem eaque magni debitis. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Rem dolor dolorum veniam! Sit et, esse vero necessitatibus nam voluptate dolore autem, expedita ullam, enim vel magni ex impedit optio porro! Lorem ipsum dolor, sit amet consectetur adipisicing elit. Optio fugit sequi consequuntur molestias provident ratione temporibus tempore nobis sunt, sapiente veniam voluptatum magni possimus cumque illum officiis ex ipsam pariatur.
 
 export default function Home() {
   const form = useForm<addLinkFormValues>({
@@ -31,7 +28,13 @@ export default function Home() {
 
   const onSubmit = (data: addLinkFormValues) => {
     console.log(data);
-    links.push(links);
+    setLinks(data.links);
+  };
+
+  const addNewLink = () => {
+    const newLinks = [...links, { platforms: "", link: "" }];
+    setLinks(newLinks);
+    form.setValue("links", newLinks);
   };
 
   const removeLink = (index: number) => {
@@ -57,7 +60,7 @@ export default function Home() {
           <section>
             <Button
               variant={"outlineViolet"}
-              onClick={() => setLinks([...links, { platforms: "", link: "" }])}
+              onClick={addNewLink}
               className="mb-6 w-full font-semibold text-violet"
             >
               + Add new link

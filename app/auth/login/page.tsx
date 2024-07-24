@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-// import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
+import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -23,7 +23,7 @@ import { loginFormSchema } from "@/lib/schema";
 
 const Page = () => {
   const router = useRouter();
-  // const supabase = createClientComponentClient();
+  const supabase = createClientComponentClient();
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -35,18 +35,17 @@ const Page = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
-    // const res = await supabase.auth.signInWithPassword({
-    //   email: values.email,
-    //   password: values.password,
-    // });
-    // if (res.data.user) {
-    //   router.refresh();
+    const res = await supabase.auth.signInWithPassword({
+      email: values.email,
+      password: values.password,
+    });
+    if (res.data.user) {
+      router.refresh();
 
-    //   form.reset();
-    // } else {
-    //   console.log("Sign-in error:", res.error);
-    // }
-    console.log("form submitted");
+      form.reset();
+    } else {
+      console.log("Sign-in error:", res.error);
+    }
   };
 
   return (

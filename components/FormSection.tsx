@@ -27,8 +27,6 @@ interface FormSectionProps {
   index: number;
 }
 
-// Lorem, ipsum dolor sit amet consectetur adipisicing elit. Labore ad, possimus ipsum veritatis quos maxime voluptatem optio doloremque omnis repellendus expedita tempore architecto, dolore voluptate recusandae minus ullam, nam error! Lorem ipsum dolor sit amet consectetur adipisicing elit. Velit eos illum, dolorum aliquid itaque odit deleniti laboriosam amet. Aperiam dicta animi quo quod culpa soluta suscipit eius similique repellat repudiandae!lorem Lorem ipsum dolor sit, amet consectetur adipisicing elit. Mollitia commodi at vel similique. Iusto accusantium commodi asperiores ducimus. Repudiandae molestias illum quas velit perspiciatis adipisci nobis laboriosam laudantium odit suscipit! Lorem ipsum dolor sit amet consectetur adipisicing elit. Tenetur eveniet deleniti dolor voluptatum tempora architecto necessitatibus explicabo distinctio libero praesentium? Commodi illo ipsum natus quidem animi molestias ipsam non vel?
-
 export default function FormSection({ form, index }: FormSectionProps) {
   return (
     <>
