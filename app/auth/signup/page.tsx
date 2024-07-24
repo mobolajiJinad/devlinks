@@ -59,7 +59,7 @@ const Page = () => {
             Create account
           </h1>
           <p className="self-stretch text-base text-gray">
-            Let's get you started sharing your links!
+            Let&apos;s get you started sharing your links!
           </p>
         </div>
 

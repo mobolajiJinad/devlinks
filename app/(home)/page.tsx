@@ -25,11 +25,14 @@ export default function Home() {
   });
 
   const [links, setLinks] = useState([{ platforms: "", link: "" }]);
-
   const onSubmit = (data: addLinkFormValues) => {
-    console.log(data);
-    setLinks(data.links);
+    const filteredLinks = data.links.map((link) => ({
+      platforms: link.platforms ?? "",
+      link: link.link,
+    }));
+    setLinks(filteredLinks);
   };
+
 
   const addNewLink = () => {
     const newLinks = [...links, { platforms: "", link: "" }];
@@ -70,12 +73,12 @@ export default function Home() {
               <section className="flex flex-col items-center justify-start rounded-xl bg-snow px-5 py-10">
                 <Image src={MainImage} alt="main image" className="mb-5" />
                 <h2 className="mb-5 text-xl font-bold">
-                  Let's get you started
+                  Let&apos;s get you started
                 </h2>
                 <p className="text-sm font-normal text-gray">
-                  Use the “Add new link” button to get started. Once you have
-                  more than one link, you can reorder and edit them. We're here
-                  to help you share your profiles with everyone!
+                  Use the &quot;Add new link&quot; button to get started. Once
+                  you have more than one link, you can reorder and edit them.
+                  We&apos;re here to help you share your profiles with everyone!
                 </p>
               </section>
             )}

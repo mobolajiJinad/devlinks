@@ -132,7 +132,7 @@ const Page = () => {
 
             <div className="mx-auto flex flex-col items-center self-stretch md:flex-row">
               <p className="text-base font-normal text-gray">
-                Don't have an account?
+                Don&apos;t have an account?
               </p>
               <Link
                 href="/auth/signup"
