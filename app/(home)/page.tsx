@@ -8,10 +8,11 @@ import { z } from "zod";
 import { GripHorizontal } from "lucide-react";
 
 import { addLinkFormSchema } from "@/lib/schema";
-import MainImage from "@/app/_assets/MainImage.svg";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import FormSection from "@/components/FormSection";
+
+import MainImage from "@/public/assets/MainImage.svg";
 
 type addLinkFormValues = z.infer<typeof addLinkFormSchema>;
 

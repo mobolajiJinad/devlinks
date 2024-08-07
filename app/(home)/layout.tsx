@@ -1,15 +1,13 @@
 import type { Metadata } from "next";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
 import Image from "next/image";
 import Link from "next/link";
 import { Instrument_Sans } from "next/font/google";
 import { Eye, CircleUserRound, Link as LinkIcon } from "lucide-react";
 
-import "@/app/globals.css";
+import "@/styles/globals.css";
 
-import DevlinksIcon from "@/app/_assets/DevlinksIcon.svg";
-import DevlinksLogo from "@/app/_assets/DevlinksLogo.svg";
+import DevlinksIcon from "@/public/assets/DevlinksIcon.svg";
+import DevlinksLogo from "@/public/assets/DevlinksLogo.svg";
 
 import { Button } from "@/components/ui/button";
 import PreviewSection from "@/components/PreviewSection";
@@ -25,29 +23,6 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookieStore = cookies();
-  const supabase = createServerComponentClient({ cookies: () => cookieStore });
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return (
-      <html lang="en">
-        <body className={`${instrumentSans.className} bg-snow`}>
-          <main className="flex min-h-screen flex-col items-center justify-between p-24">
-            <Link href={"/auth/login"}>
-              You are not logged in. Click here to go login.
-            </Link>
-          </main>
-        </body>
-      </html>
-    );
-  }
-
-  console.log(user);
-
   return (
     <html lang="en">
       <body className={`${instrumentSans.className} bg-snow`}>

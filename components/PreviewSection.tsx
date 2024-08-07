@@ -1,12 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import OuterPhoneRectangle from "@/app/_assets/OuterPhoneRectangle.svg";
-import InnerPhoneRectangle from "@/app/_assets/InnerPhoneRectangle.svg";
-import ProfilePicPlaceholder from "@/app/_assets/ProfilePicPlaceholder.svg";
-import NamePlaceholder from "@/app/_assets/NamePlaceholder.svg";
-import EmailPlaceholder from "@/app/_assets/EmailPlaceholder.svg";
-import LinkPlaceholder from "@/app/_assets/LinkPlaceholder.svg";
+import OuterPhoneRectangle from "@/public/assets/OuterPhoneRectangle.svg";
+import InnerPhoneRectangle from "@/public/assets/InnerPhoneRectangle.svg";
+import ProfilePicPlaceholder from "@/public/assets/ProfilePicPlaceholder.svg";
+import NamePlaceholder from "@/public/assets/NamePlaceholder.svg";
+import EmailPlaceholder from "@/public/assets/EmailPlaceholder.svg";
+import LinkPlaceholder from "@/public/assets/LinkPlaceholder.svg";
 
 interface PreviewSectionProps {
   links: { platforms: string; link: string }[];
