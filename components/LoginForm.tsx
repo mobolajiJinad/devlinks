@@ -37,16 +37,17 @@ const LoginForm = () => {
       const res = await signIn("credentials", {
         email: values.email,
         password: values.password,
-        redirect: false,
       });
 
-      if (res.error) {
-        throw new Error("Invalid Credentials");
+      if (!res || !res.ok) {
+        console.log("Login failed.");
       }
 
-      router.replace("/");
+      if (res?.ok) {
+        router.replace("/");
+      }
     } catch (error) {
-      console.log(error);
+      console.log("Error during signing up: ", error);
     }
   };
 
