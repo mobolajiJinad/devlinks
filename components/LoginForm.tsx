@@ -4,6 +4,8 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { Lock, Mail } from "lucide-react";
 
 import { loginFormSchema } from "@/lib/schema";
@@ -19,6 +21,8 @@ import {
 } from "@/components/ui/form";
 
 const LoginForm = () => {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
     defaultValues: {
@@ -29,7 +33,21 @@ const LoginForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
-    console.log(values);
+    try {
+      const res = await signIn("credentials", {
+        email: values.email,
+        password: values.password,
+        redirect: false,
+      });
+
+      if (res.error) {
+        throw new Error("Invalid Credentials");
+      }
+
+      router.replace("/");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   return (
