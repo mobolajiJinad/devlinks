@@ -1,6 +1,14 @@
-import LoginForm from "@/components/LoginForm";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
 
-const Page = () => {
+import LoginForm from "@/components/LoginForm";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+
+const Page = async () => {
+  const session = await getServerSession(authOptions);
+
+  if (session) redirect("/");
+
   return (
     <main className="flex flex-col items-start gap-10 md:w-[29rem] md:items-center md:rounded-xl md:bg-white">
       <div className="flex w-full flex-col gap-10 self-stretch md:p-10">

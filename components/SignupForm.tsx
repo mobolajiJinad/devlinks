@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -20,6 +21,8 @@ import {
 import { signupFormSchema } from "@/lib/schema";
 
 const SignupForm = () => {
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof signupFormSchema>>({
     resolver: zodResolver(signupFormSchema),
     defaultValues: {
@@ -31,7 +34,41 @@ const SignupForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof signupFormSchema>) => {
-    console.log(values);
+    try {
+      const resUserExists = await fetch("/api/userExists", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email: values.email }),
+      });
+
+      const { user } = await resUserExists.json();
+
+      if (user) {
+        router.replace("/auth/login");
+        return;
+      }
+
+      const res = await fetch("/api/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: values.email,
+          password: values.password,
+        }),
+      });
+
+      if (res.ok) {
+        router.replace("/");
+      } else {
+        console.log("User registration failed.");
+      }
+    } catch (error) {
+      console.log("Error during registration: ", error);
+    }
   };
 
   return (
