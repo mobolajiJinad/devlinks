@@ -1,3 +1,4 @@
+import { AuthOptions } from "next-auth";
 import NextAuth from "next-auth/next";
 import CredentialsProvider from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
@@ -5,13 +6,16 @@ import bcrypt from "bcryptjs";
 import User from "@/models/user";
 import { connectToDB } from "@/lib/database";
 
-export const authOptions = {
+export const authOptions: AuthOptions = {
   providers: [
     CredentialsProvider({
       name: "Credentials",
       credentials: {},
       async authorize(credentials) {
-        const { email, password } = credentials;
+        const { email, password } = credentials as {
+          email: string;
+          password: string;
+        };
 
         try {
           await connectToDB();
@@ -34,6 +38,15 @@ export const authOptions = {
       },
     }),
   ],
+  callbacks: {
+    session: ({ session, token }) => ({
+      ...session,
+      user: {
+        ...session.user,
+        id: token.sub,
+      },
+    }),
+  },
   session: {
     strategy: "jwt",
   },

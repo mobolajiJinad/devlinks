@@ -40,11 +40,11 @@ const LoginForm = () => {
         redirect: false,
       });
 
-      if (res.error) {
+      if (res?.error) {
         throw new Error("Invalid Credentials");
       }
 
-      router.replace("/");
+      router.push("/");
     } catch (error) {
       console.log(error);
     }

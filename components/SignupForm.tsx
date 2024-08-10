@@ -62,7 +62,7 @@ const SignupForm = () => {
       });
 
       if (res.ok) {
-        router.replace("/");
+        router.push("/");
       } else {
         console.log("User registration failed.");
       }
