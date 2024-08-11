@@ -2,10 +2,12 @@
 
 import Image from "next/image";
 import { z } from "zod";
-import { GripHorizontal } from "lucide-react";
+import { useState, useEffect } from "react";
+import { GripHorizontal, Router } from "lucide-react";
 import { useForm, FormProvider, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 import { addLinkFormSchema } from "@/lib/schema";
 import { Button } from "@/components/ui/button";
@@ -16,8 +18,17 @@ import MainImage from "@/public/assets/MainImage.svg";
 
 type addLinkFormValues = z.infer<typeof addLinkFormSchema>;
 
+interface LinkType {
+  _id: string;
+  platform: "github" | "twitter" | "linkedin" | "dev.to" | "codeware" | null;
+  link: string;
+}
+
 const HomeMain = () => {
   const { data: session } = useSession();
+  const [linksToRemove, setLinksToRemove] = useState<string[]>([]);
+
+  const router = useRouter();
 
   const form = useForm<addLinkFormValues>({
     resolver: zodResolver(addLinkFormSchema),
@@ -32,6 +43,30 @@ const HomeMain = () => {
     name: "links",
   });
 
+  useEffect(() => {
+    const fetchLinks = async () => {
+      if (session?.user.id) {
+        try {
+          const response = await fetch(`/api/links/${session.user.id}`);
+          if (!response.ok) {
+            throw new Error("Failed to fetch links");
+          }
+          const data: LinkType[] = await response.json();
+          if (data.length > 0) {
+            form.reset({ links: data });
+            console.log(data);
+          } else {
+            form.reset({ links: [{ platform: null, link: "" }] });
+          }
+        } catch (err: any) {
+          console.log(err);
+        }
+      }
+    };
+
+    fetchLinks();
+  }, [session?.user.id, form]);
+
   const onSubmit = async (data: addLinkFormValues) => {
     try {
       const response = await fetch("/api/links/new", {
@@ -42,15 +77,19 @@ const HomeMain = () => {
         body: JSON.stringify({
           userID: session?.user.id,
           links: data.links,
+          linksToRemove: linksToRemove,
         }),
       });
 
       if (response.ok) {
         const updatedLinks = await response.json();
         form.reset({ links: updatedLinks });
+        setLinksToRemove([]);
       } else {
         console.error("Failed to save links");
       }
+
+      router.push("/preview");
     } catch (error) {
       console.error("An error occurred:", error);
     }
@@ -61,6 +100,11 @@ const HomeMain = () => {
   };
 
   const removeLink = (index: number) => {
+    const linkToRemove = fields[index];
+    if (linkToRemove._id) {
+      setLinksToRemove((prev) => [...prev, linkToRemove._id as string]);
+    }
+
     remove(index);
   };
 

@@ -6,7 +6,6 @@ import "../globals.css";
 import { AuthProvider } from "@/components/Providers";
 
 import Header from "@/components/Header";
-import PreviewSection from "@/components/PreviewSection";
 
 const instrumentSans = Instrument_Sans({ subsets: ["latin"] });
 
@@ -27,11 +26,7 @@ export default async function RootLayout({
         <AuthProvider>
           <Header />
 
-          <div className="md:flex md:justify-between md:gap-x-3">
-            <PreviewSection />
-
-            {children}
-          </div>
+          {children}
         </AuthProvider>
       </body>
     </html>
