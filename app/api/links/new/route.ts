@@ -7,19 +7,27 @@ import Link from "@/models/link";
 export async function POST(request: NextRequest) {
   await connectToDB();
 
+  const {
+    userID,
+    links,
+    linksToRemove,
+  }: {
+    userID: string;
+    links: { platform: string; link: string }[];
+    linksToRemove: string[];
+  } = await request.json();
+
   try {
-    const {
-      userID,
-      links,
-    }: { userID: string; links: { platform: string; link: string }[] } =
-      await request.json();
+    if (linksToRemove && linksToRemove.length > 0) {
+      await Link.deleteMany({ _id: { $in: linksToRemove }, creator: userID });
+    }
 
     const updatedLinks = await Promise.all(
       links.map(async (link) => {
         const updatedLink = await Link.findOneAndUpdate(
           { creator: userID, platform: link.platform },
           { $set: { link: link.link } },
-          { new: true, upsert: true },
+          { new: true, upsert: true, setDefaultsOnInsert: true },
         );
 
         await User.findByIdAndUpdate(userID, {

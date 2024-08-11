@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { Types } from "mongoose";
 
 export const loginFormSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -25,6 +26,12 @@ export const signupFormSchema = z
   });
 
 export const linkSchema = z.object({
+  _id: z
+    .string()
+    .refine((val) => Types.ObjectId.isValid(val), {
+      message: "Invalid MongoDB ObjectId",
+    })
+    .optional(),
   link: z.string().url({ message: "Please enter a valid URL." }),
   platform: z
     .enum(["github", "twitter", "linkedin", "dev.to", "codeware"])
