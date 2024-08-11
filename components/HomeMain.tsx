@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
 import Image from "next/image";
 import { z } from "zod";
 import { GripHorizontal } from "lucide-react";
-import { useForm, FormProvider } from "react-hook-form";
+import { useForm, FormProvider, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useSession } from "next-auth/react";
 
 import { addLinkFormSchema } from "@/lib/schema";
 import { Button } from "@/components/ui/button";
@@ -17,33 +17,51 @@ import MainImage from "@/public/assets/MainImage.svg";
 type addLinkFormValues = z.infer<typeof addLinkFormSchema>;
 
 const HomeMain = () => {
+  const { data: session } = useSession();
+
   const form = useForm<addLinkFormValues>({
     resolver: zodResolver(addLinkFormSchema),
     defaultValues: {
-      links: [{ platforms: "", link: "" }],
+      links: [{ platform: null, link: "" }],
     },
     mode: "onChange",
   });
 
-  const [links, setLinks] = useState([{ platforms: "", link: "" }]);
-  const onSubmit = (data: addLinkFormValues) => {
-    const filteredLinks = data.links.map((link) => ({
-      platforms: link.platforms ?? "",
-      link: link.link,
-    }));
-    setLinks(filteredLinks);
+  const { fields, append, remove } = useFieldArray({
+    control: form.control,
+    name: "links",
+  });
+
+  const onSubmit = async (data: addLinkFormValues) => {
+    try {
+      const response = await fetch("/api/links/new", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          userID: session?.user.id,
+          links: data.links,
+        }),
+      });
+
+      if (response.ok) {
+        const updatedLinks = await response.json();
+        form.reset({ links: updatedLinks });
+      } else {
+        console.error("Failed to save links");
+      }
+    } catch (error) {
+      console.error("An error occurred:", error);
+    }
   };
 
   const addNewLink = () => {
-    const newLinks = [...links, { platforms: "", link: "" }];
-    setLinks(newLinks);
-    form.setValue("links", newLinks);
+    append({ platform: null, link: "" });
   };
 
   const removeLink = (index: number) => {
-    const newLinks = links.filter((_, i) => i !== index);
-    setLinks(newLinks);
-    form.setValue("links", newLinks);
+    remove(index);
   };
 
   return (
@@ -58,7 +76,7 @@ const HomeMain = () => {
             + Add new link
           </Button>
 
-          {links.length === 0 && (
+          {fields.length === 0 && (
             <section className="flex flex-col items-center justify-start rounded-xl bg-snow px-5 py-10">
               <Image src={MainImage} alt="main image" className="mb-5" />
               <h2 className="mb-5 text-xl font-bold">
@@ -72,9 +90,9 @@ const HomeMain = () => {
             </section>
           )}
 
-          {links.map((link, index) => (
+          {fields.map((field, index) => (
             <section
-              key={index}
+              key={field.id || index}
               className="mt-3 flex flex-col items-center justify-start rounded-xl bg-snow px-5 py-10"
             >
               <div className="flex w-full items-center justify-between py-2">

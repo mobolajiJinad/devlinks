@@ -28,7 +28,7 @@ export default async function RootLayout({
           <Header />
 
           <div className="md:flex md:justify-between md:gap-x-3">
-            <PreviewSection links={[]} />
+            <PreviewSection />
 
             {children}
           </div>

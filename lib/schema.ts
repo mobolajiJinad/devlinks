@@ -26,12 +26,9 @@ export const signupFormSchema = z
 
 export const linkSchema = z.object({
   link: z.string().url({ message: "Please enter a valid URL." }),
-  platforms: z
-    .string()
-    .min(2, {
-      message: "Platform name should not be less than 2 characters.",
-    })
-    .optional(),
+  platform: z
+    .enum(["github", "twitter", "linkedin", "dev.to", "codeware"])
+    .nullable(),
 });
 
 export const addLinkFormSchema = z.object({

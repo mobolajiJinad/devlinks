@@ -32,7 +32,7 @@ export default function FormSection({ form, index }: FormSectionProps) {
     <>
       <FormField
         control={form.control}
-        name={`links.${index}.platforms`}
+        name={`links.${index}.platform`}
         render={({ field }) => (
           <FormItem className="w-full">
             <FormLabel className="text-charcoal">Platform</FormLabel>
@@ -43,11 +43,11 @@ export default function FormSection({ form, index }: FormSectionProps) {
                 </SelectTrigger>
               </FormControl>
               <SelectContent>
-                <SelectItem value="Github">Github</SelectItem>
-                <SelectItem value="Twitter">Twitter</SelectItem>
-                <SelectItem value="Linkedin">Linkedin</SelectItem>
-                <SelectItem value="Dev.to">Dev.to</SelectItem>
-                <SelectItem value="Codeware">Codeware</SelectItem>
+                <SelectItem value="github">Github</SelectItem>
+                <SelectItem value="twitter">Twitter</SelectItem>
+                <SelectItem value="linkedin">Linkedin</SelectItem>
+                <SelectItem value="dev.to">Dev.to</SelectItem>
+                <SelectItem value="codeware">Codeware</SelectItem>
               </SelectContent>
             </Select>
             <FormMessage />
