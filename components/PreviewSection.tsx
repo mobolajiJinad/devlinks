@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 import OuterPhoneRectangle from "@/public/assets/OuterPhoneRectangle.svg";
 import InnerPhoneRectangle from "@/public/assets/InnerPhoneRectangle.svg";
@@ -7,12 +10,41 @@ import ProfilePicPlaceholder from "@/public/assets/ProfilePicPlaceholder.svg";
 import NamePlaceholder from "@/public/assets/NamePlaceholder.svg";
 import EmailPlaceholder from "@/public/assets/EmailPlaceholder.svg";
 import LinkPlaceholder from "@/public/assets/LinkPlaceholder.svg";
+import { useEffect, useState } from "react";
 
-interface PreviewSectionProps {
-  links: { platforms: string; link: string }[];
+interface LinkType {
+  _id: string;
+  creator: string;
+  platform: string;
+  link: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-const PreviewSection = ({ links }: PreviewSectionProps) => {
+const PreviewSection = () => {
+  const { data: session } = useSession();
+
+  const [links, setLinks] = useState<LinkType[]>([]);
+
+  useEffect(() => {
+    const fetchLinks = async () => {
+      if (session?.user.id) {
+        try {
+          const response = await fetch(`/api/links/${session.user.id}`);
+          if (!response.ok) {
+            throw new Error("Failed to fetch links");
+          }
+          const data: LinkType[] = await response.json();
+          setLinks(data);
+        } catch (err: any) {
+          console.log(err);
+        }
+      }
+    };
+
+    fetchLinks();
+  }, [session?.user.id]);
+
   return (
     <section className="my-4 hidden rounded-xl bg-white p-4 sm:p-2 md:flex md:w-2/5 md:items-center md:justify-center md:p-6 lg:w-4/12">
       <div className="relative max-w-sm">
@@ -43,13 +75,13 @@ const PreviewSection = ({ links }: PreviewSectionProps) => {
             if (index < links.length) {
               return (
                 <Link
-                  key={index}
+                  key={links[index]._id}
                   href={links[index].link}
                   className="w-3/4 text-center text-blue-500 underline"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  {links[index].platforms}
+                  {links[index].platform}
                 </Link>
               );
             } else {

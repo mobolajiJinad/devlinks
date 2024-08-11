@@ -11,6 +11,12 @@ const UserSchema = new Schema(
       type: String,
       required: [true, "Password is required!"],
     },
+    links: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Link",
+      },
+    ],
   },
   { timestamps: true },
 );
