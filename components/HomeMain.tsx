@@ -85,7 +85,7 @@ const HomeMain = () => {
                   </h2>
                 </div>
                 <Button
-                  variant="outline"
+                  variant="link"
                   onClick={() => removeLink(index)}
                   className="font-normal text-gray"
                 >

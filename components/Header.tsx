@@ -1,5 +1,7 @@
+"use client";
+
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 
@@ -9,8 +11,10 @@ import DevlinksIcon from "@/public/assets/DevlinksIcon.svg";
 import DevlinksLogo from "@/public/assets/DevlinksLogo.svg";
 
 const Header = () => {
+  const router = useRouter();
+
   return (
-    <header className="mb-4 flex items-center justify-between gap-2 self-stretch rounded-xl bg-white p-4 pl-6 md:m-6 md:mb-6 md:p-6">
+    <header className="flex items-center justify-between gap-2 self-stretch rounded-xl bg-white p-4 pl-6 md:p-6">
       <div className="flex items-center gap-2">
         <Image src={DevlinksIcon} alt="links icon" className="shrink-0" />
         <Image
@@ -21,32 +25,37 @@ const Header = () => {
       </div>
 
       <div className="flex md:px-4">
-        <div className="flex w-20 items-center justify-center gap-2 rounded-lg bg-lavender px-2.5 py-1.5">
+        <div
+          onClick={() => {
+            router.push("/");
+          }}
+          className="flex w-20 cursor-pointer items-center justify-center gap-2 rounded-lg bg-lavender px-2.5 py-1.5"
+        >
           <LinkIcon className="text-violet" />
-          <Link
-            href="/"
-            className="hidden font-semibold text-gray hover:text-violet md:inline-block"
-          >
+          <p className="hidden font-medium text-gray hover:text-violet sm:inline-block">
             Link
-          </Link>
+          </p>
         </div>
-        <div className="group flex items-center justify-center gap-2 rounded-lg px-2.5 py-1.5">
-          <CircleUserRound className="cursor-pointer text-gray group-hover:text-violet" />
-          <Link
-            href="/user-profile"
-            className="hidden font-semibold text-gray active:text-violet group-hover:text-violet md:inline-block"
-          >
+        <div
+          onClick={() => {
+            router.push("/user-profile");
+          }}
+          className="group flex cursor-pointer items-center justify-center gap-2 rounded-lg px-2.5 py-1.5"
+        >
+          <CircleUserRound className="text-gray group-hover:text-violet" />
+          <p className="hidden font-medium text-gray active:text-violet group-hover:text-violet sm:inline-block">
             User profile
-          </Link>
+          </p>
         </div>
       </div>
 
       <Button
         variant={"outlineViolet"}
-        className="h-10 w-14 rounded-lg md:w-28"
+        onClick={() => router.push("/preview")}
+        className="h-10 w-14 rounded-lg sm:w-28"
       >
-        <Eye className="block text-violet md:hidden" />
-        <span className="hidden md:inline-block">Preview</span>
+        <Eye className="block text-violet sm:hidden" />
+        <span className="hidden sm:inline-block">Preview</span>
       </Button>
     </header>
   );

@@ -8,14 +8,12 @@ import NamePlaceholder from "@/public/assets/NamePlaceholder.svg";
 import EmailPlaceholder from "@/public/assets/EmailPlaceholder.svg";
 import LinkPlaceholder from "@/public/assets/LinkPlaceholder.svg";
 
-interface PreviewSectionProps {
-  links: { platforms: string; link: string }[];
-}
+const Page = () => {
+  const links: { platforms: string; link: string }[] = [];
 
-const PreviewSection = ({ links }: PreviewSectionProps) => {
   return (
-    <section className="my-4 hidden rounded-xl bg-white p-4 sm:p-2 md:flex md:w-2/5 md:items-center md:justify-center md:p-6 lg:w-4/12">
-      <div className="relative max-w-sm">
+    <section className="my-4 flex max-w-sm items-center justify-center rounded-xl bg-white p-4 sm:p-2 md:p-6">
+      <div className="relative">
         <Image src={OuterPhoneRectangle} alt="phone case" className="w-full" />
         <Image
           src={InnerPhoneRectangle}
@@ -69,4 +67,4 @@ const PreviewSection = ({ links }: PreviewSectionProps) => {
   );
 };
 
-export default PreviewSection;
+export default Page;

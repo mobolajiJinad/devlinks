@@ -59,7 +59,7 @@ export default function FormSection({ form, index }: FormSectionProps) {
         control={form.control}
         name={`links.${index}.link`}
         render={({ field }) => (
-          <FormItem className="w-ful mt-2">
+          <FormItem className="mt-2 w-full">
             <FormLabel className="text-charcoal">Link</FormLabel>
             <FormControl>
               <Input type="text" {...field} />

@@ -46,7 +46,7 @@ const SignupForm = () => {
       const { user } = await resUserExists.json();
 
       if (user) {
-        router.replace("/auth/login");
+        router.push("/auth/login");
         return;
       }
 

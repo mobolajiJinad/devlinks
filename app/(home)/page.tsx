@@ -9,9 +9,9 @@ export default function Home() {
   console.log(session);
 
   return (
-    <main className="m-4 rounded-xl bg-white p-4 md:m-6 md:p-6 lg:w-8/12">
+    <main className="my-4 rounded-xl bg-white p-4 md:w-3/5 md:p-6 lg:w-8/12">
       <section className="mb-10">
-        <h1 className="mb-1.5 text-xl font-bold text-charcoal md:text-3xl">
+        <h1 className="mb-1.5 text-xl font-bold text-charcoal md:text-2xl">
           Customize your links
         </h1>
         <p className="text-sm text-gray md:text-base">

@@ -21,11 +21,13 @@ export default async function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${instrumentSans.className} bg-snow`}>
+      <body
+        className={`${instrumentSans.className} bg-snow p-4 md:p-6 lg:px-8`}
+      >
         <AuthProvider>
           <Header />
 
-          <div className="flex justify-between">
+          <div className="md:flex md:justify-between md:gap-x-3">
             <PreviewSection links={[]} />
 
             {children}
