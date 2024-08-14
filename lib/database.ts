@@ -18,22 +18,24 @@ export const connectToDB = async () => {
       );
     }
 
+    if (mongoose.connection.listeners("connected").length === 0) {
+      mongoose.connection.on("connected", () => {
+        isConnected = true;
+        console.log("MongoDB is connected");
+      });
+
+      mongoose.connection.on("error", (error) => {
+        console.log("MongoDB connection error:", error);
+      });
+
+      mongoose.connection.on("disconnected", () => {
+        isConnected = false;
+        console.log("MongoDB connection disconnected");
+      });
+    }
+
     await mongoose.connect(mongoURI, {
       dbName: "devlinks",
-    });
-
-    mongoose.connection.on("connected", () => {
-      isConnected = true;
-      console.log("MongoDB is connected");
-    });
-
-    mongoose.connection.on("error", (error) => {
-      console.log("MongoDB connection error:", error);
-    });
-
-    mongoose.connection.on("disconnected", () => {
-      isConnected = false;
-      console.log("MongoDB connection disconnected");
     });
   } catch (error) {
     console.log(error);
