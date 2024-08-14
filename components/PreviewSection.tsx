@@ -3,6 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
+import { MoveRight } from "lucide-react";
+
+import { Button } from "./ui/button";
 
 import OuterPhoneRectangle from "@/public/assets/OuterPhoneRectangle.svg";
 import InnerPhoneRectangle from "@/public/assets/InnerPhoneRectangle.svg";
@@ -10,7 +14,6 @@ import ProfilePicPlaceholder from "@/public/assets/ProfilePicPlaceholder.svg";
 import NamePlaceholder from "@/public/assets/NamePlaceholder.svg";
 import EmailPlaceholder from "@/public/assets/EmailPlaceholder.svg";
 import LinkPlaceholder from "@/public/assets/LinkPlaceholder.svg";
-import { useEffect, useState } from "react";
 
 interface LinkType {
   _id: string;
@@ -70,19 +73,24 @@ const PreviewSection = () => {
           className="absolute left-1/3 top-[45%] h-auto w-1/3"
         />
 
-        <div className="absolute left-2 top-1/2 flex w-full flex-col items-center gap-y-5">
-          {Array.from({ length: 4 }).map((_, index) => {
+        <div className="absolute left-2 top-1/2 flex w-full flex-col items-center gap-y-3">
+          {Array.from({ length: 5 }).map((_, index) => {
             if (index < links.length) {
               return (
-                <Link
+                <Button
+                  className="flex w-3/4 items-center justify-between bg-[#8A1A50] px-4"
                   key={links[index]._id}
-                  href={links[index].link}
-                  className="w-3/4 text-center text-blue-500 underline"
-                  target="_blank"
-                  rel="noopener noreferrer"
                 >
-                  {links[index].platform}
-                </Link>
+                  <Link
+                    href={links[index].link}
+                    className="text-center capitalize text-white"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {links[index].platform}
+                  </Link>
+                  <MoveRight />
+                </Button>
               );
             } else {
               return (

@@ -34,7 +34,21 @@ export const linkSchema = z.object({
     .optional(),
   link: z.string().url({ message: "Please enter a valid URL." }),
   platform: z
-    .enum(["github", "twitter", "linkedin", "dev.to", "codeware"])
+    .enum([
+      "github",
+      "frontendMentor",
+      "twitter",
+      "linkedin",
+      "youtube",
+      "facebook",
+      "twitch",
+      "devTo",
+      "codewars",
+      "freeCodeCamp",
+      "gitlab",
+      "hashnode",
+      "stackOverflow",
+    ])
     .nullable(),
 });
 

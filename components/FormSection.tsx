@@ -44,10 +44,18 @@ export default function FormSection({ form, index }: FormSectionProps) {
               </FormControl>
               <SelectContent>
                 <SelectItem value="github">Github</SelectItem>
+                <SelectItem value="frontendMentor">Frontend Mentor</SelectItem>
                 <SelectItem value="twitter">Twitter</SelectItem>
-                <SelectItem value="linkedin">Linkedin</SelectItem>
-                <SelectItem value="dev.to">Dev.to</SelectItem>
-                <SelectItem value="codeware">Codeware</SelectItem>
+                <SelectItem value="linkedin">LinkedIn</SelectItem>
+                <SelectItem value="youtube">YouTube</SelectItem>
+                <SelectItem value="facebook">Facebook</SelectItem>
+                <SelectItem value="twitch">Twitch</SelectItem>
+                <SelectItem value="devTo">Dev.to</SelectItem>
+                <SelectItem value="codewars">Codewars</SelectItem>
+                <SelectItem value="freeCodeCamp">freeCodeCamp</SelectItem>
+                <SelectItem value="gitlab">GitLab</SelectItem>
+                <SelectItem value="hashnode">Hashnode</SelectItem>
+                <SelectItem value="stackOverflow">Stack Overflow</SelectItem>
               </SelectContent>
             </Select>
             <FormMessage />
