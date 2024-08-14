@@ -20,7 +20,21 @@ type addLinkFormValues = z.infer<typeof addLinkFormSchema>;
 
 interface LinkType {
   _id: string;
-  platform: "github" | "twitter" | "linkedin" | "dev.to" | "codeware" | null;
+  platform:
+    | "github"
+    | "frontendMentor"
+    | "twitter"
+    | "linkedin"
+    | "youtube"
+    | "facebook"
+    | "twitch"
+    | "devTo"
+    | "codewars"
+    | "freeCodeCamp"
+    | "gitlab"
+    | "hashnode"
+    | "stackOverflow"
+    | null;
   link: string;
 }
 
