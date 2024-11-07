@@ -2,15 +2,14 @@
 
 import DesktopLayout from "@/components/DesktopLayout";
 import useIsDesktop from "@/utils/hooks/useIsDesktop";
+import UserProfile from "@/components/UserProfile";
 
-const Page = () => {
+export default function UserProfilePage() {
   const isDeskTop = useIsDesktop();
 
   if (isDeskTop) {
-    return <DesktopLayout rightComponent={<div>Page</div>} />;
+    return <DesktopLayout rightComponent={<UserProfile />} />;
   }
 
-  return <div>Page</div>;
-};
-
-export default Page;
+  return <UserProfile />;
+}

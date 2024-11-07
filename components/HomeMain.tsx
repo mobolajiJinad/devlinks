@@ -40,6 +40,8 @@ interface LinkType {
 
 const HomeMain = () => {
   const { data: session } = useSession();
+  console.log(`session HomeMain: ${session}`);
+
   const [linksToRemove, setLinksToRemove] = useState<string[]>([]);
 
   const router = useRouter();

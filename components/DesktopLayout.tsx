@@ -6,7 +6,7 @@ const DesktopLayout = ({
   rightComponent: React.ReactNode;
 }) => {
   return (
-    <div>
+    <div className="grid grid-cols-2 gap-5">
       <div>
         <PreviewSection />
       </div>

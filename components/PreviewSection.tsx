@@ -26,6 +26,7 @@ interface LinkType {
 
 const PreviewSection = () => {
   const { data: session } = useSession();
+  console.log(`session Preview Page: ${session}`);
 
   const [links, setLinks] = useState<LinkType[]>([]);
 
