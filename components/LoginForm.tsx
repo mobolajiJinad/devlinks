@@ -1,16 +1,16 @@
 "use client";
 
-import Link from "next/link";
-import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { Lock, Mail } from "lucide-react";
+import { signIn } from "next-auth/react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { ColorRing } from "react-loader-spinner";
+import { z } from "zod";
 
-import { loginFormSchema } from "@/lib/schema";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -19,8 +19,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { loginFormSchema } from "@/lib/schema";
 
 const LoginForm = () => {
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
@@ -33,6 +36,7 @@ const LoginForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof loginFormSchema>) => {
+    setLoading(true);
     try {
       const res = await signIn("credentials", {
         email: values.email,
@@ -49,6 +53,8 @@ const LoginForm = () => {
     } catch (error) {
       console.log(error);
     }
+
+    setLoading(false);
   };
 
   return (
@@ -119,7 +125,19 @@ const LoginForm = () => {
           type="submit"
           className="h-11 w-full rounded-lg bg-violet font-semibold text-white hover:bg-mauve"
         >
-          Login
+          {loading ? (
+            <ColorRing
+              visible={true}
+              height="30"
+              width="30"
+              ariaLabel="color-ring-loading"
+              wrapperStyle={{}}
+              wrapperClass="color-ring-wrapper"
+              colors={["#737373", "#737373", "#737373", "#737373", "#737373"]}
+            />
+          ) : (
+            "Login"
+          )}
         </Button>
 
         <div className="mx-auto flex flex-col items-center self-stretch md:flex-row">

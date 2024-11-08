@@ -1,14 +1,15 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Lock, Mail } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { ColorRing } from "react-loader-spinner";
 import { z } from "zod";
-import { Lock, Mail } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Form,
   FormControl,
@@ -17,11 +18,13 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
 
 import { signupFormSchema } from "@/lib/schema";
 
 const SignupForm = () => {
   const router = useRouter();
+  const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof signupFormSchema>>({
     resolver: zodResolver(signupFormSchema),
@@ -34,6 +37,7 @@ const SignupForm = () => {
   });
 
   const onSubmit = async (values: z.infer<typeof signupFormSchema>) => {
+    setLoading(true);
     try {
       const resUserExists = await fetch("/api/userExists", {
         method: "POST",
@@ -69,6 +73,7 @@ const SignupForm = () => {
     } catch (error) {
       console.log("Error during registration: ", error);
     }
+    setLoading(false);
   };
 
   return (
@@ -168,7 +173,19 @@ const SignupForm = () => {
           type="submit"
           className="h-11 w-full rounded-lg bg-violet font-semibold text-white hover:bg-mauve"
         >
-          Create an account
+          {loading ? (
+            <ColorRing
+              visible={true}
+              height="30"
+              width="30"
+              ariaLabel="color-ring-loading"
+              wrapperStyle={{}}
+              wrapperClass="color-ring-wrapper"
+              colors={["#737373", "#737373", "#737373", "#737373", "#737373"]}
+            />
+          ) : (
+            "Create an account"
+          )}
         </Button>
 
         <div className="mx-auto flex flex-col items-center self-stretch md:flex-row">

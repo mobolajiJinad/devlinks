@@ -8,6 +8,7 @@ import { useForm, FormProvider, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import { ColorRing } from "react-loader-spinner";
 
 import { addLinkFormSchema } from "@/lib/schema";
 import { Button } from "@/components/ui/button";
@@ -40,6 +41,7 @@ interface LinkType {
 
 const HomeMain = () => {
   const { data: session } = useSession();
+  const [loading, setLoading] = useState(false);
   console.log(`session HomeMain: ${session}`);
 
   const [linksToRemove, setLinksToRemove] = useState<string[]>([]);
@@ -49,7 +51,7 @@ const HomeMain = () => {
   const form = useForm<addLinkFormValues>({
     resolver: zodResolver(addLinkFormSchema),
     defaultValues: {
-      links: [{ platform: null, link: "" }],
+      links: [],
     },
     mode: "onChange",
   });
@@ -84,6 +86,7 @@ const HomeMain = () => {
   }, [session?.user.id, form]);
 
   const onSubmit = async (data: addLinkFormValues) => {
+    setLoading(true);
     try {
       const response = await fetch("/api/links/new", {
         method: "POST",
@@ -109,6 +112,7 @@ const HomeMain = () => {
     } catch (error) {
       console.error("An error occurred:", error);
     }
+    setLoading(false);
   };
 
   const addNewLink = () => {
@@ -181,7 +185,19 @@ const HomeMain = () => {
             type="submit"
             className="block w-full rounded-lg bg-violet font-semibold text-white hover:bg-mauve disabled:bg-violet/25 md:ml-auto md:w-20"
           >
-            Save
+            {loading ? (
+              <ColorRing
+                visible={true}
+                height="30"
+                width="30"
+                ariaLabel="color-ring-loading"
+                wrapperStyle={{}}
+                wrapperClass="color-ring-wrapper"
+                colors={["#737373", "#737373", "#737373", "#737373", "#737373"]}
+              />
+            ) : (
+              "Save"
+            )}
           </Button>
         </section>
       </form>
