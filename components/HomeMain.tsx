@@ -1,19 +1,20 @@
 "use client";
 
-import Image from "next/image";
-import { z } from "zod";
-import { useState, useEffect } from "react";
-import { GripHorizontal, Router } from "lucide-react";
-import { useForm, FormProvider, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { GripHorizontal } from "lucide-react";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { FormProvider, useFieldArray, useForm } from "react-hook-form";
 import { ColorRing } from "react-loader-spinner";
+import { z } from "zod";
 
-import { addLinkFormSchema } from "@/lib/schema";
+import FormSection from "@/components/FormSection";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import FormSection from "@/components/FormSection";
+import { addLinkFormSchema } from "@/lib/schema";
+import { LinkSkeleton } from "@/components/Skeleton";
 
 import MainImage from "@/public/assets/MainImage.svg";
 
@@ -41,7 +42,8 @@ interface LinkType {
 
 const HomeMain = () => {
   const { data: session } = useSession();
-  const [loading, setLoading] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [linkLoading, setLinkLoading] = useState(false);
   console.log(`session HomeMain: ${session}`);
 
   const [linksToRemove, setLinksToRemove] = useState<string[]>([]);
@@ -62,6 +64,7 @@ const HomeMain = () => {
   });
 
   useEffect(() => {
+    setLinkLoading(true);
     const fetchLinks = async () => {
       if (session?.user.id) {
         try {
@@ -78,6 +81,8 @@ const HomeMain = () => {
           }
         } catch (err: any) {
           console.log(err);
+        } finally {
+          setLinkLoading(false);
         }
       }
     };
@@ -86,7 +91,7 @@ const HomeMain = () => {
   }, [session?.user.id, form]);
 
   const onSubmit = async (data: addLinkFormValues) => {
-    setLoading(true);
+    setSubmitLoading(true);
     try {
       const response = await fetch("/api/links/new", {
         method: "POST",
@@ -112,7 +117,7 @@ const HomeMain = () => {
     } catch (error) {
       console.error("An error occurred:", error);
     }
-    setLoading(false);
+    setSubmitLoading(false);
   };
 
   const addNewLink = () => {
@@ -140,7 +145,9 @@ const HomeMain = () => {
             + Add new link
           </Button>
 
-          {fields.length === 0 && (
+          {linkLoading ? (
+            <LinkSkeleton />
+          ) : fields.length === 0 ? (
             <section className="flex flex-col items-center justify-start rounded-xl bg-snow px-5 py-10">
               <Image src={MainImage} alt="main image" className="mb-5" />
               <h2 className="mb-5 text-xl font-bold">
@@ -152,32 +159,32 @@ const HomeMain = () => {
                 We&apos;re here to help you share your profiles with everyone!
               </p>
             </section>
-          )}
-
-          {fields.map((field, index) => (
-            <section
-              key={field.id || index}
-              className="mt-3 flex flex-col items-center justify-start rounded-xl bg-snow px-5 py-10"
-            >
-              <div className="flex w-full items-center justify-between py-2">
-                <div className="flex items-center gap-x-2">
-                  <GripHorizontal className="text-gray" />
-                  <h2 className="font-bold capitalize text-gray">
-                    link #{index + 1}
-                  </h2>
+          ) : (
+            fields.map((field, index) => (
+              <section
+                key={field.id || index}
+                className="mt-3 flex flex-col items-center justify-start rounded-xl bg-snow px-5 py-10"
+              >
+                <div className="flex w-full items-center justify-between py-2">
+                  <div className="flex items-center gap-x-2">
+                    <GripHorizontal className="text-gray" />
+                    <h2 className="font-bold capitalize text-gray">
+                      link #{index + 1}
+                    </h2>
+                  </div>
+                  <Button
+                    variant="link"
+                    onClick={() => removeLink(index)}
+                    className="font-normal text-gray"
+                  >
+                    Remove
+                  </Button>
                 </div>
-                <Button
-                  variant="link"
-                  onClick={() => removeLink(index)}
-                  className="font-normal text-gray"
-                >
-                  Remove
-                </Button>
-              </div>
 
-              <FormSection form={form} index={index} />
-            </section>
-          ))}
+                <FormSection form={form} index={index} />
+              </section>
+            ))
+          )}
 
           <Separator className="my-5" />
 
@@ -185,7 +192,7 @@ const HomeMain = () => {
             type="submit"
             className="block w-full rounded-lg bg-violet font-semibold text-white hover:bg-mauve disabled:bg-violet/25 md:ml-auto md:w-20"
           >
-            {loading ? (
+            {submitLoading ? (
               <ColorRing
                 visible={true}
                 height="30"
