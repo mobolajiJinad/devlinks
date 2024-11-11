@@ -2,7 +2,7 @@
 
 import DesktopLayout from "@/components/DesktopLayout";
 import Home from "@/components/Home";
-import useIsDesktop from "@/utils/hooks/useIsDesktop";
+import useIsDesktop from "@/hooks/use-is-desktop";
 
 export default function HomePage() {
   const isDeskTop = useIsDesktop();

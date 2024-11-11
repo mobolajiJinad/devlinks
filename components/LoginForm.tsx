@@ -21,10 +21,13 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { loginFormSchema } from "@/lib/schema";
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/hooks/use-toast";
 
 const LoginForm = () => {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const { toast } = useToast();
 
   const form = useForm<z.infer<typeof loginFormSchema>>({
     resolver: zodResolver(loginFormSchema),
@@ -45,11 +48,25 @@ const LoginForm = () => {
       });
 
       if (res?.error) {
-        throw new Error("Invalid Credentials");
+        toast({
+          description: "Wrong email or password",
+          action: (
+            <ToastAction altText="Try again" onClick={() => form.reset()}>
+              Try again
+            </ToastAction>
+          ),
+        });
+
+        setLoading(false);
+
+        return;
       }
 
+      toast({
+        description: "Login successful",
+      });
+
       router.push("/");
-      router.refresh();
     } catch (error) {
       console.log(error);
     }
