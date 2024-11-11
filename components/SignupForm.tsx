@@ -19,11 +19,13 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
+import { ToastAction } from "@/components/ui/toast";
+import { useToast } from "@/hooks/use-toast";
 import { signupFormSchema } from "@/lib/schema";
 
 const SignupForm = () => {
   const router = useRouter();
+  const { toast } = useToast();
   const [loading, setLoading] = useState(false);
 
   const form = useForm<z.infer<typeof signupFormSchema>>({
@@ -50,7 +52,21 @@ const SignupForm = () => {
       const { user } = await resUserExists.json();
 
       if (user) {
-        router.push("/auth/login");
+        toast({
+          description:
+            "Email is already in use! Please login or use another mail address",
+          action: (
+            <ToastAction
+              altText="Go to login page"
+              onClick={() => router.push("/auth/login")}
+            >
+              Log in
+            </ToastAction>
+          ),
+        });
+
+        setLoading(false);
+
         return;
       }
 
@@ -66,9 +82,21 @@ const SignupForm = () => {
       });
 
       if (res.ok) {
-        router.push("/");
+        toast({
+          description: "Sign up successful!",
+        });
       } else {
-        console.log("User registration failed.");
+        toast({
+          description: "An error occurred, please try again",
+          action: (
+            <ToastAction
+              altText="Refresh page"
+              onClick={() => router.refresh()}
+            >
+              Refresh
+            </ToastAction>
+          ),
+        });
       }
     } catch (error) {
       console.log("Error during registration: ", error);
