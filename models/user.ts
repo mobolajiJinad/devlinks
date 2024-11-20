@@ -17,6 +17,9 @@ const UserSchema = new Schema(
         ref: "Link",
       },
     ],
+    profilePicture: String,
+    firstName: String,
+    lastName: String,
   },
   { timestamps: true },
 );

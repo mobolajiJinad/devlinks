@@ -69,7 +69,7 @@ const LoginForm = () => {
       router.push("/");
       router.refresh(); // without this, user won't be redirected automatically to home page
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
 
     setLoading(false);

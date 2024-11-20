@@ -44,7 +44,6 @@ const HomeMain = () => {
   const { data: session } = useSession();
   const [submitLoading, setSubmitLoading] = useState(false);
   const [linkLoading, setLinkLoading] = useState(false);
-  console.log(`session HomeMain: ${session}`);
 
   const [linksToRemove, setLinksToRemove] = useState<string[]>([]);
 
@@ -75,12 +74,11 @@ const HomeMain = () => {
           const data: LinkType[] = await response.json();
           if (data.length > 0) {
             form.reset({ links: data });
-            console.log(data);
           } else {
             form.reset({ links: [{ platform: null, link: "" }] });
           }
         } catch (err: any) {
-          console.log(err);
+          console.error(err);
         } finally {
           setLinkLoading(false);
         }
