@@ -1,34 +1,43 @@
 "use client";
 
-import { useEffect } from "react";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { signOut } from "next-auth/react";
+import { z } from "zod";
 
-import { userProfileSchema } from "@/lib/schema";
 import { Button } from "@/components/ui/button";
 import {
+  FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
-  FormDescription,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import UploadImage from "@/public/assets/UploadImage.svg";
+import { userProfileSchema } from "@/lib/schema";
+
+type UserData = {
+  profilePicture?: File;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+};
 
 type userProfileValues = z.infer<typeof userProfileSchema>;
 
 const UserProfileMain = () => {
   const { data: session } = useSession();
 
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [profilePicturePreview, setProfilePicturePreview] =
+    useState<string>("");
+
   const form = useForm<userProfileValues>({
     resolver: zodResolver(userProfileSchema),
     defaultValues: {
-      profilePicture: "",
+      profilePicture: null,
       firstName: "",
       lastName: "",
       email: "",
@@ -36,34 +45,112 @@ const UserProfileMain = () => {
   });
 
   useEffect(() => {
-    // fetch existing user data
-  }, [session?.user.id, form]);
+    if (session) {
+      const fetchUserData = async () => {
+        try {
+          const response = await fetch("/api/user", {
+            method: "POST",
+            body: JSON.stringify({ ID: session.user.id }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to fetch user data");
+          }
+          const data: UserData = await response.json();
+
+          setUserData(data);
+        } catch (error) {
+          console.error(error);
+        }
+      };
+
+      fetchUserData();
+    }
+  }, [session?.user.id]);
+
+  useEffect(() => {
+    if (userData) {
+      form.reset(userData);
+    }
+  }, [userData, form]);
+
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const fileUrl = URL.createObjectURL(file);
+      setProfilePicturePreview(fileUrl);
+
+      form.setValue("profilePicture", file);
+    }
+  };
+
+  const onSubmit = async (data: userProfileValues) => {
+    const formData = new FormData();
+
+    if (data.profilePicture instanceof File) {
+      formData.append("profilePicture", data.profilePicture);
+    }
+
+    formData.append("firstName", data.firstName || "");
+    formData.append("lastName", data.lastName || "");
+    formData.append("email", data.email || "");
+
+    try {
+      const response = await fetch("/api/user", {
+        method: "PUT",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update user data");
+      }
+
+      alert("Profile updated successfully!");
+      const updatedData = await response.json();
+      setUserData(updatedData);
+    } catch (error) {
+      console.error(error);
+      alert("Failed to save changes.");
+    }
+  };
 
   return (
     <div>
       <FormProvider {...form}>
-        <form onSubmit={form.handleSubmit((data) => console.log(data))}>
+        <form onSubmit={form.handleSubmit(onSubmit)}>
           <section className="my-2 rounded-2xl bg-snow p-4">
             <FormField
               control={form.control}
               name="profilePicture"
-              render={({ field }) => (
+              render={() => (
                 <FormItem className="flex flex-col items-center gap-x-2 p-2 sm:flex-row">
-                  <FormLabel className="text-grey my-1 w-full sm:w-1/3">
+                  <FormLabel className="my-1 w-full text-grey sm:w-1/3">
                     Profile Picture
                   </FormLabel>
+
                   <div>
-                    <FormControl>
-                      <Input
-                        type="file"
-                        placeholder="John"
-                        className="text-grey h-full min-h-48 w-full min-w-48"
-                        {...field}
+                    {profilePicturePreview ? (
+                      <img
+                        src={profilePicturePreview}
+                        alt="Profile Preview"
+                        className="h-48 w-48 rounded-full object-cover"
                       />
-                    </FormControl>
-                    <FormDescription className="text-grey my-1">
-                      Image must be below 1024x1024px. Use PNG or JPG format.
-                    </FormDescription>
+                    ) : (
+                      <>
+                        <FormControl>
+                          <input
+                            type="file"
+                            accept="image/*"
+                            onChange={handleFileChange}
+                            className="h-48 w-48 rounded-full bg-white text-grey"
+                          />
+                        </FormControl>
+                        <FormDescription className="my-1 text-grey">
+                          Image must be below 1024x1024px. Use PNG or JPG
+                          format.
+                        </FormDescription>
+                      </>
+                    )}
                   </div>
                   <FormMessage />
                 </FormItem>
@@ -77,7 +164,7 @@ const UserProfileMain = () => {
               name="firstName"
               render={({ field }) => (
                 <FormItem className="flex flex-col items-center gap-x-2 p-2 sm:flex-row">
-                  <FormLabel className="text-grey my-1 w-full sm:w-1/3">
+                  <FormLabel className="my-1 w-full text-grey sm:w-1/3">
                     First name
                   </FormLabel>
                   <FormControl>
@@ -97,7 +184,7 @@ const UserProfileMain = () => {
               name="lastName"
               render={({ field }) => (
                 <FormItem className="flex flex-col items-center gap-x-2 p-2 sm:flex-row">
-                  <FormLabel className="text-grey my-1 w-full sm:w-1/3">
+                  <FormLabel className="my-1 w-full text-grey sm:w-1/3">
                     Last name
                   </FormLabel>
                   <FormControl>
@@ -113,7 +200,7 @@ const UserProfileMain = () => {
               name="email"
               render={({ field }) => (
                 <FormItem className="flex flex-col items-center gap-x-2 p-2 sm:flex-row">
-                  <FormLabel className="text-grey my-1 w-full sm:w-1/3">
+                  <FormLabel className="my-1 w-full text-grey sm:w-1/3">
                     Email
                   </FormLabel>
                   <FormControl>
@@ -128,17 +215,17 @@ const UserProfileMain = () => {
               )}
             />
           </section>
+
+          <Button
+            type="submit"
+            className="block w-full rounded-lg bg-violet font-semibold text-white hover:bg-mauve disabled:bg-violet/25 md:ml-auto md:w-1/2"
+          >
+            Save
+          </Button>
         </form>
       </FormProvider>
 
-      <section className="flex flex-col gap-4 md:flex-row">
-        <Button
-          type="submit"
-          className="block w-full rounded-lg bg-violet font-semibold text-white hover:bg-mauve disabled:bg-violet/25 md:ml-auto md:w-1/2"
-        >
-          Save
-        </Button>
-
+      <section className="mt-4 flex flex-col gap-4 md:flex-row">
         <Button
           variant="outlineViolet"
           className="block w-full rounded-lg font-semibold text-violet hover:bg-mauve md:ml-auto md:w-1/2"

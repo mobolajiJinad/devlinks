@@ -26,7 +26,6 @@ interface LinkType {
 
 const PreviewSection = () => {
   const { data: session } = useSession();
-  console.log(`session Preview Page: ${session}`);
 
   const [links, setLinks] = useState<LinkType[]>([]);
 
@@ -41,7 +40,7 @@ const PreviewSection = () => {
           const data: LinkType[] = await response.json();
           setLinks(data);
         } catch (err: any) {
-          console.log(err);
+          console.error(err);
         }
       }
     };

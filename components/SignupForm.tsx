@@ -99,7 +99,7 @@ const SignupForm = () => {
         });
       }
     } catch (error) {
-      console.log("Error during registration: ", error);
+      console.error("Error during registration: ", error);
     }
     setLoading(false);
   };
