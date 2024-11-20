@@ -24,6 +24,7 @@ const config = {
         lavender: "#EFEBFF",
         charcoal: "#333333",
         gray: "#737373",
+        grey: "#888888",
         gainsboro: "#D9D9D9",
         snow: "#FAFAFA",
         white: "#FFFFFF",

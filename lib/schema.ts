@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { Types } from "mongoose";
+import Email from "next-auth/providers/email";
 
 export const loginFormSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -54,4 +55,20 @@ export const linkSchema = z.object({
 
 export const addLinkFormSchema = z.object({
   links: z.array(linkSchema),
+});
+
+export const userProfileSchema = z.object({
+  profilePicture: z
+    .string()
+    .url({ message: "Please enter a valid URL." })
+    .optional(),
+  firstName: z
+    .string()
+    .min(2, "First name must be longer than 1 character")
+    .optional(),
+  lastName: z
+    .string()
+    .min(2, "Last name must be longer than 1 character")
+    .optional(),
+  email: z.string().email("Invalid email address").optional(),
 });
