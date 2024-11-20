@@ -11,10 +11,10 @@ import { ColorRing } from "react-loader-spinner";
 import { z } from "zod";
 
 import FormSection from "@/components/FormSection";
+import { LinkSkeleton } from "@/components/Skeleton";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { addLinkFormSchema } from "@/lib/schema";
-import { LinkSkeleton } from "@/components/Skeleton";
 
 import MainImage from "@/public/assets/MainImage.svg";
 
