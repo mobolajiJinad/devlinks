@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signOut, useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
@@ -17,9 +18,10 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { userProfileSchema } from "@/lib/schema";
+import ProfilePicPlaceholder from "@/public/assets/ProfilePicPlaceholder.jpg";
 
 type UserData = {
-  profilePicture?: File;
+  profilePicture?: string;
   firstName?: string;
   lastName?: string;
   email?: string;
@@ -70,7 +72,12 @@ const UserProfileMain = () => {
 
   useEffect(() => {
     if (userData) {
-      form.reset(userData);
+      const adjustedUserData = {
+        ...userData,
+        profilePicture: null,
+      };
+
+      form.reset(adjustedUserData);
     }
   }, [userData, form]);
 
@@ -131,41 +138,40 @@ const UserProfileMain = () => {
               control={form.control}
               name="profilePicture"
               render={() => (
-                <FormItem className="flex flex-col items-center gap-x-2 p-2 sm:flex-row">
-                  <FormLabel className="my-1 w-full text-grey sm:w-1/3">
-                    Profile Picture
-                  </FormLabel>
-
-                  <div>
-                    {userData?.profilePicture ? (
-                      <img
-                        src={userData.profilePicture}
-                        alt="Profile Preview"
-                        className="h-48 w-48 rounded-full object-cover"
+                <FormItem className="">
+                  {/* Input for selecting a new profile picture */}
+                  <div className="my-3 flex items-center gap-x-2 p-2">
+                    <FormLabel className="my-1 w-2/3 text-grey">
+                      Change Profile Picture
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleFileChange}
+                        placeholder="Change profile picture"
+                        className="text-grey"
                       />
-                    ) : profilePicturePreview ? (
-                      <img
-                        src={profilePicturePreview}
-                        alt="Profile Preview"
-                        className="h-48 w-48 rounded-full object-cover"
-                      />
-                    ) : (
-                      <>
-                        <FormControl>
-                          <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleFileChange}
-                            className="h-48 w-48 rounded-full bg-white text-grey"
-                          />
-                        </FormControl>
-                        <FormDescription className="my-1 text-grey">
-                          Image must be below 1024x1024px. Use PNG or JPG
-                          format.
-                        </FormDescription>
-                      </>
-                    )}
+                    </FormControl>
                   </div>
+
+                  {/* Profile Picture - default or formerly saved */}
+                  <Image
+                    width={192}
+                    height={192}
+                    src={
+                      profilePicturePreview ||
+                      userData?.profilePicture ||
+                      ProfilePicPlaceholder.src
+                    }
+                    alt="Profile Picture"
+                    className="mx-auto h-48 w-48 rounded-full object-cover"
+                  />
+
+                  <FormDescription className="mt-3 text-center text-grey">
+                    Image must be below 1024x1024px. Use PNG or JPG format.
+                  </FormDescription>
+
                   <FormMessage />
                 </FormItem>
               )}
@@ -218,11 +224,7 @@ const UserProfileMain = () => {
                     Email
                   </FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="johndoe@example.com"
-                      className="text-grey"
-                      {...field}
-                    />
+                    <Input disabled className="text-grey" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -232,7 +234,7 @@ const UserProfileMain = () => {
 
           <Button
             type="submit"
-            className="block w-full rounded-lg bg-violet font-semibold text-white hover:bg-mauve disabled:bg-violet/25 md:ml-auto md:w-1/2"
+            className="block w-full rounded-lg bg-violet font-semibold text-white hover:bg-mauve disabled:bg-violet/25"
           >
             Save
           </Button>
@@ -242,7 +244,7 @@ const UserProfileMain = () => {
       <section className="mt-4 flex flex-col gap-4 md:flex-row">
         <Button
           variant="outlineViolet"
-          className="block w-full rounded-lg font-semibold text-violet hover:bg-mauve md:ml-auto md:w-1/2"
+          className="block w-full rounded-lg font-semibold text-violet hover:bg-mauve"
           onClick={() => signOut()}
         >
           Log out
