@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { signOut, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { z } from "zod";
@@ -35,6 +36,8 @@ const UserProfileMain = () => {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [profilePicturePreview, setProfilePicturePreview] =
     useState<string>("");
+
+  const router = useRouter();
 
   const form = useForm<userProfileValues>({
     resolver: zodResolver(userProfileSchema),
@@ -123,6 +126,7 @@ const UserProfileMain = () => {
       const updatedData = await response.json();
 
       setUserData(updatedData.user);
+      router.push("/preview");
     } catch (error) {
       console.error(error);
       alert("Failed to save changes.");
