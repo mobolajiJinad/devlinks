@@ -10,7 +10,7 @@ import { Button } from "./ui/button";
 
 import OuterPhoneRectangle from "@/public/assets/OuterPhoneRectangle.svg";
 import InnerPhoneRectangle from "@/public/assets/InnerPhoneRectangle.svg";
-import ProfilePicPlaceholder from "@/public/assets/ProfilePicPlaceholder.svg";
+import ProfilePicPlaceholder from "@/public/assets/ProfilePicPlaceholder.jpg";
 import NamePlaceholder from "@/public/assets/NamePlaceholder.svg";
 import EmailPlaceholder from "@/public/assets/EmailPlaceholder.svg";
 import LinkPlaceholder from "@/public/assets/LinkPlaceholder.svg";
