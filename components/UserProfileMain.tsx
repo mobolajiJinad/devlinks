@@ -91,9 +91,15 @@ const UserProfileMain = () => {
       formData.append("profilePicture", data.profilePicture);
     }
 
-    formData.append("firstName", data.firstName || "");
-    formData.append("lastName", data.lastName || "");
-    formData.append("email", data.email || "");
+    if (data.firstName) {
+      formData.append("firstName", data.firstName);
+    }
+    if (data.lastName) {
+      formData.append("lastName", data.lastName);
+    }
+    if (data.email) {
+      formData.append("email", data.email);
+    }
 
     try {
       const response = await fetch("/api/user", {
@@ -102,12 +108,14 @@ const UserProfileMain = () => {
       });
 
       if (!response.ok) {
+        alert("Failed to save changes.");
         throw new Error("Failed to update user data");
       }
 
       alert("Profile updated successfully!");
       const updatedData = await response.json();
-      setUserData(updatedData);
+
+      setUserData(updatedData.user);
     } catch (error) {
       console.error(error);
       alert("Failed to save changes.");
@@ -129,7 +137,13 @@ const UserProfileMain = () => {
                   </FormLabel>
 
                   <div>
-                    {profilePicturePreview ? (
+                    {userData?.profilePicture ? (
+                      <img
+                        src={userData.profilePicture}
+                        alt="Profile Preview"
+                        className="h-48 w-48 rounded-full object-cover"
+                      />
+                    ) : profilePicturePreview ? (
                       <img
                         src={profilePicturePreview}
                         alt="Profile Preview"

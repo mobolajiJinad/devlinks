@@ -9,7 +9,7 @@ import "../globals.css";
 import DevlinksIcon from "@/public/assets/DevlinksIcon.svg";
 import DevlinksLogo from "@/public/assets/DevlinksLogo.svg";
 
-const instrumentSans = Instrument_Sans({ subsets: ["latin"] });
+const instrumentSans = Instrument_Sans({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   title: "DevLinks",

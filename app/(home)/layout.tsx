@@ -7,7 +7,7 @@ import { AuthProvider } from "@/components/Providers";
 
 import Header from "@/components/Header";
 
-const instrumentSans = Instrument_Sans({ subsets: ["latin"] });
+const instrumentSans = Instrument_Sans({ subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
   title: "DevLinks",
